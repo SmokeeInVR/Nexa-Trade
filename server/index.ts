@@ -3,6 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes.js";
+import { runMigrations } from "./migrate.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -21,10 +22,14 @@ app.use((req, res, next) => {
   next();
 });
 
+await runMigrations();
 await registerRoutes(httpServer, app);
 
 if (process.env.NODE_ENV === "production") {
-  const distPath = path.join(__dirname, "../../dist");
+  // When running with tsx, __dirname is /app/server
+  // dist is built to /app/dist by vite
+  const distPath = path.resolve(process.cwd(), "dist");
+  console.log("Serving static from:", distPath);
   app.use(express.static(distPath));
   app.get("*", (_req, res) => {
     res.sendFile(path.join(distPath, "index.html"));
