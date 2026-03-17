@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci --prefer-offline=false"]
+
+[phases.build]
+cmds = ["rm -rf dist .vite", "npm run build"]
+
+[start]
+cmd = "npm run start"
