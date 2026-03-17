@@ -3,7 +3,7 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes.js";
-import { runMigrations } from "./migrate.js";
+import { runMigrations } from "./migrate.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
